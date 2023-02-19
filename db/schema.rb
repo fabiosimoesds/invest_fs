@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_15_223200) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_19_161349) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -28,8 +28,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_15_223200) do
     t.string "address"
     t.string "fiscal_year_end"
     t.date "latest_quarter"
-    t.integer "market_cap"
-    t.integer "ebitida"
+    t.bigint "market_cap"
+    t.bigint "ebitida"
     t.float "pe_ratio"
     t.float "peg_ratio"
     t.float "book_value"
@@ -58,7 +58,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_15_223200) do
     t.float "fifty_two_weeks_low"
     t.float "fifty_day_moving_avg"
     t.float "two_hundred_day_moving_avg"
-    t.integer "shares_outstanding"
+    t.bigint "shares_outstanding"
     t.date "dividend_date"
     t.date "ex_dividend_date"
     t.datetime "created_at", null: false

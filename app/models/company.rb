@@ -46,4 +46,73 @@
 # t.date :ex_dividend_date
 
 class Company < ApplicationRecord
+
+  def get_data
+  end
+
+  def self.create_companies
+    api_key = ENV.fetch('API_KEY', nil)
+
+    ENV['SP500'].split(',').first(300).each do |ticker|
+    # ['IBM'].each do |ticker|
+      url = "https://www.alphavantage.co/query?function=OVERVIEW&symbol=#{ticker.strip}&apikey=#{api_key}"
+      company_serialized = URI.open(url).read
+      company_hash = JSON.parse(company_serialized)
+      # Create a company
+      company = Company.new(
+        ticker: company_hash['Symbol'],
+        asset_type: company_hash['AssetType'],
+        name: company_hash['Name'],
+        description: company_hash['Description'],
+        cik: company_hash['CIK'],
+        exchange: company_hash['Exchange'],
+        currency: company_hash['Currency'],
+        country: company_hash['Country'],
+        sector: company_hash['Sector'],
+        industry: company_hash['Industry'],
+        address: company_hash['Address'],
+        fiscal_year_end: company_hash['FiscalYearEnd'],
+        latest_quarter: "#{Date.parse(company_hash['LatestQuarter']) if company_hash['LatestQuarter']}", # Date
+        market_cap: company_hash['MarketCapitalization'].to_i,
+        ebitida: company_hash['EBITDA'].to_i,
+        pe_ratio: company_hash['PERatio'].to_f,
+        peg_ratio: company_hash['PEGRatio'].to_f,
+        book_value: company_hash['BookValue'].to_f,
+        dividend_per_share: company_hash['DividendPerShare'].to_f,
+        dividend_yield: company_hash['DividendYield'].to_f,
+        eps: company_hash['EPS'].to_f,
+        revenue_per_share_ttm: company_hash['RevenuePerShareTTM'].to_f,
+        profit_margin: company_hash['ProfitMargin'].to_f,
+        operating_margin_ttm: company_hash['OperatingMarginTTM'].to_f,
+        return_on_assets_ttm: company_hash['ReturnOnAssetsTTM'].to_f,
+        return_on_equity_ttm: company_hash['ReturnOnEquityTTM'].to_f,
+        revenue_ttm: company_hash['RevenueTTM'].to_f,
+        gross_profit_ttm: company_hash['GrossProfitTTM'].to_f,
+        diluted_eps_ttm: company_hash['DilutedEPSTTM'].to_f,
+        quarterly_earnings_growth_yoy: company_hash['QuarterlyEarningsGrowthYOY'].to_f,
+        quarterly_revenue_growth_yoy: company_hash['QuarterlyRevenueGrowthYOY'].to_f,
+        analyst_target_price: company_hash['AnalystTargetPrice'].to_f,
+        trailing_pe: company_hash['TrailingPE'].to_f,
+        forward_pe: company_hash['ForwardPE'].to_f,
+        price_to_sales_ratio_ttm: company_hash['PriceToSalesRatioTTM'].to_f,
+        price_to_book_ratio: company_hash['PriceToBookRatio'].to_f,
+        ev_to_revenue: company_hash['EVToRevenue'].to_f,
+        ev_to_ebitda: company_hash['EVToEBITDA'].to_f,
+        beta: company_hash['Beta'].to_f,
+        fifty_two_weeks_high: company_hash['52WeekHigh'].to_f,
+        fifty_two_weeks_low: company_hash['52WeekLow'].to_f,
+        fifty_day_moving_avg: company_hash['50DayMovingAverage'].to_f,
+        two_hundred_day_moving_avg: company_hash['200DayMovingAverage'].to_f,
+        shares_outstanding: company_hash['SharesOutstanding'].to_i,
+        dividend_date: "#{Date.parse(company_hash['DividendDate']) ? Date.parse(company_hash['DividendDate']) : company_hash['DividendDate']}", # date
+        ex_dividend_date: "#{Date.parse(company_hash['ExDividendDate']) ? Date.parse(company_hash['ExDividendDate']) : company_hash['ExDividendDate']}", # date
+      )
+
+      # I need to create a method to handle the erro for Date.parse and do something.
+      company.save
+    end
+  end
+
+  def self.update_data
+  end
 end

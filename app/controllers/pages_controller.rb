@@ -1,10 +1,9 @@
 class PagesController < ApplicationController
   def home
     # https://www.alphavantage.co/documentation/   -   5 API request per minute and 500 per day
-    api_key = 'K111A2NHFZBNE0F8'
-    url = "https://www.alphavantage.co/query?function=OVERVIEW&symbol=IBM&apikey=#{api_key}"
   end
 end
+
 
 # How the data is displayed
 
