@@ -1,0 +1,34 @@
+<%= turbo_frame_tag 'companies', class: 'shadow overflow-hidden rounded' do %>
+  <table class="bg-white">
+    <thead class="bg-secondary text-white">
+      <tr>
+        <th id="companies-ticker" class="text-left py-2 px-4 text-decoration-none">
+          <%= sort_link(column: "ticker", label: "Ticker") %>
+        </th>
+
+        <th id="companies-name" class="text-left py-3 px-4">
+          <%= sort_link(column: "name", label: "Name") %>
+        </th>
+
+        <th id="companies-season" class="text-left py-3 px-4">
+          <%= sort_link(column: "sector", label: "Sector") %>
+        </th>
+        
+        <th id="companies-season" class="text-left py-3 px-4">
+          <%= sort_link(column: "dividend_yield", label: "DY") %>
+        </th>
+      </tr>
+    </thead>
+
+    <tbody class="">
+      <% companies.each do |company| %>
+        <tr>
+          <td class="text-left py-3 px-4"><%= company.ticker %></td>
+          <td class="text-left py-3 px-4"><%= company.name %></td>
+          <td class="text-left py-3 px-4"><%= company.sector %></td>
+          <td class="text-left py-3 px-4"><%= (company.dividend_yield * 100).truncate(2) %> %</td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

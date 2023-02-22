@@ -1,5 +1,11 @@
 Rails.application.routes.draw do
-  root to: "pages#home"
+  root to: "companies#index"
+
+  resources :companies do
+    collection do
+      get 'list'
+    end
+  end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")
