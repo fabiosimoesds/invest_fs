@@ -46,6 +46,8 @@
 # t.date :ex_dividend_date
 
 class Company < ApplicationRecord
+  has_many :company_list
+
   def get_data
   end
 
@@ -179,5 +181,16 @@ class Company < ApplicationRecord
 
   def self.high_yield
     Company.where('dividend_yield > 0.04')
+  end
+
+  def self.to_csv
+    attributes = %w[ticker name sector dividend_yield]
+    CSV.generate(headers: true) do |csv|
+      csv << attributes
+
+      all.each do |company|
+        csv << company.attributes.values_at(*attributes)
+      end
+    end
   end
 end
