@@ -1,20 +1,24 @@
-<%= turbo_frame_tag 'companies', class: 'shadow overflow-hidden rounded' do %>
+<%= turbo_frame_tag 'companies', class: 'shadow overflow-hidden rounded mb-4' do %>
   <table class="bg-white">
     <thead class="bg-secondary text-white">
       <tr>
-        <th id="companies-ticker" class="text-left py-2 px-4 text-decoration-none">
+        <th id="companies-ticker" class="text-left py-2 px-4 text-decoration-none position-relative">
+          <%= sort_indicator if params[:column] == 'ticker' %>
           <%= sort_link(column: "ticker", label: "Ticker") %>
         </th>
 
-        <th id="companies-name" class="text-left py-3 px-4">
+        <th id="companies-name" class="text-left py-3 px-4 position-relative">
+          <%= sort_indicator if params[:column] == 'name' %>
           <%= sort_link(column: "name", label: "Name") %>
         </th>
 
-        <th id="companies-season" class="text-left py-3 px-4">
+        <th id="companies-season" class="text-left py-3 px-4 position-relative">
+        <%= sort_indicator if params[:column] == 'sector' %>
           <%= sort_link(column: "sector", label: "Sector") %>
         </th>
         
-        <th id="companies-season" class="text-left py-3 px-4">
+        <th id="companies-season" class="text-left py-3 px-4 position-relative">
+        <%= sort_indicator if params[:column] == 'dividend_yield' %>
           <%= sort_link(column: "dividend_yield", label: "DY") %>
         </th>
       </tr>
