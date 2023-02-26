@@ -48,16 +48,21 @@
 class Company < ApplicationRecord
   has_many :company_list
 
+  validates :ticker, presence: true, uniqueness: true
+
   def get_data
   end
 
   def self.create_companies
-    api_key = ENV['SECOND_API_KEY']
+    api_key = ENV['API_KEY']
 
-    @new_companies.each do |ticker|
-    # ['IBM'].each do |ticker|
+    ENV['SP500'].each_with_index do |ticker, index|
+
+      if index % 2 == 0
+        api_key = ENV['SECOND_API_KEY']
+      end
       url = "https://www.alphavantage.co/query?function=OVERVIEW&symbol=#{ticker}&apikey=#{api_key}"
-      p url
+
       company_serialized = URI.open(url).read
       company_hash = JSON.parse(company_serialized)
       # Create a company
@@ -121,13 +126,16 @@ class Company < ApplicationRecord
   def self.update_data
     api_key = ENV['API_KEY']
 
-    Company.all[0..250].each do |company|
+    Company.all.each_with_index do |company, index|
+
+      if index % 2 == 0
+        api_key = ENV['SECOND_API_KEY']
+      end
       url = "https://www.alphavantage.co/query?function=OVERVIEW&symbol=#{company.ticker}&apikey=#{api_key}"
       company_serialized = URI.open(url).read
       company_hash = JSON.parse(company_serialized)
       if company_hash.present?
         company.update(
-          ticker: company_hash['Symbol'],
           asset_type: company_hash['AssetType'],
           name: company_hash['Name'],
           description: company_hash['Description'],
@@ -183,13 +191,20 @@ class Company < ApplicationRecord
     Company.where('dividend_yield > 0.04')
   end
 
+  def share_price
+    self.market_cap/self.shares_outstanding
+  end
+
   def self.to_csv
-    attributes = %w[ticker name sector dividend_yield]
+    attributes = %w[ticker name sector dividend_yield dividend_per_share peg_ratio]
     CSV.generate(headers: true) do |csv|
-      csv << attributes
+      csv << %w[ticker name sector dividend_yield dividend_per_share peg_ratio share_price]
 
       all.each do |company|
-        csv << company.attributes.values_at(*attributes)
+        company_row = company.attributes.values_at(*attributes)
+        company_row << company.share_price
+
+        csv << company_row
       end
     end
   end

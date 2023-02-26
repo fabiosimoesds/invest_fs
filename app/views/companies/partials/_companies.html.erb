@@ -12,14 +12,29 @@
           <%= sort_link(column: "name", label: "Name") %>
         </th>
 
-        <th id="companies-season" class="text-left py-3 px-4 position-relative">
-        <%= sort_indicator if params[:column] == 'sector' %>
+        <th id="companies-sector" class="text-left py-3 px-4 position-relative">
+          <%= sort_indicator if params[:column] == 'sector' %>
           <%= sort_link(column: "sector", label: "Sector") %>
         </th>
         
-        <th id="companies-season" class="text-left py-3 px-4 position-relative">
-        <%= sort_indicator if params[:column] == 'dividend_yield' %>
+        <th id="companies-dy" class="text-left py-3 px-4 position-relative">
+          <%= sort_indicator if params[:column] == 'dividend_yield' %>
           <%= sort_link(column: "dividend_yield", label: "DY") %>
+        </th>
+
+        <th id="companies-dividend-share" class="text-left py-3 px-4 position-relative">
+          <%= sort_indicator if params[:column] == 'dividend_per_share' %>
+          <%= sort_link(column: "dividend_per_share", label: "Dividend Per Share") %>
+        </th>
+
+        <th id="companies-shareprice" class="text-left py-3 px-4 position-relative">
+          <%= sort_indicator if params[:column] == 'share_price' %>
+          <%= sort_link(column: "share_price", label: "Share Price") %>
+        </th>
+
+        <th id="companies-peg" class="text-left py-3 px-4 position-relative">
+          <%= sort_indicator if params[:column] == 'peg_ratio' %>
+          <%= sort_link(column: "peg_ratio", label: "PEG") %>
         </th>
       </tr>
     </thead>
@@ -31,6 +46,9 @@
           <td class="text-left py-3 px-4"><%= company.name %></td>
           <td class="text-left py-3 px-4"><%= company.sector %></td>
           <td class="text-left py-3 px-4"><%= (company.dividend_yield * 100).truncate(2) %> %</td>
+          <td class="text-left py-3 px-4">$ <%= (company.dividend_per_share).truncate(2) %></td>
+          <td class="text-left py-3 px-4">$ <%= (company.share_price).truncate(2) %></td>
+          <td class="text-left py-3 px-4"><%= (company.peg_ratio).truncate(2) %></td>
         </tr>
       <% end %>
     </tbody>
